@@ -116,4 +116,26 @@ module.exports = [
       }
     }
   },
+  // Delete specific contact
+  {
+    method: 'DELETE',
+    path: '/contact/{contactId}',
+    config: {
+      description: 'Delete specific contact',
+      tags: ['api'],
+      handler: (request, reply) => {
+        Contacts.deleteOne(
+          { _id: request.params.contactId},
+          (err, response) => {
+          if (err) return console.error(err);
+          reply({ data: response });
+        })
+      },
+      validate: {
+        params: {
+          contactId: Joi.string().alphanum().required()
+        }
+      }
+    }
+  },
 ]
