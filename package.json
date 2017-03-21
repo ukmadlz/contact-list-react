@@ -1,6 +1,6 @@
 {
   "name": "contact-list-react",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A quick app to go through implementing React & Redux",
   "main": "index.js",
   "scripts": {

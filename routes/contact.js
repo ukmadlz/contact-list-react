@@ -35,6 +35,14 @@ const validateContactPayload = {
   }
 };
 
+// Get single contact
+const getContactById = (id, reply) => {
+  Contacts.findById({ _id: id}, (err, contacts) => {
+    if (err) return console.error(err);
+    reply({ data: contacts })
+  })
+};
+
 module.exports = [
   // List all nodes
   {
@@ -75,15 +83,36 @@ module.exports = [
       description: 'Get specific contact',
       tags: ['api'],
       handler: (request, reply) => {
-        Contacts.findById({ _id: request.params.contactId}, (err, contacts) => {
-          if (err) return console.error(err);
-          reply({ data: contacts })
-        })
+        getContactById(request.params.contactId, reply);
       },
       validate: {
         params: {
           contactId: Joi.string().alphanum().required()
         }
+      }
+    }
+  },
+  // Update specific contact
+  {
+    method: 'PUT',
+    path: '/contact/{contactId}',
+    config: {
+      description: 'Update specific contact',
+      tags: ['api'],
+      handler: (request, reply) => {
+        Contacts.update(
+          { _id: request.params.contactId},
+          request.payload,
+          (err, contacts) => {
+          if (err) return console.error(err);
+          getContactById(request.params.contactId, reply);
+        })
+      },
+      validate: {
+        params: {
+          contactId: Joi.string().alphanum().required()
+        },
+        payload: validateContactPayload
       }
     }
   },
